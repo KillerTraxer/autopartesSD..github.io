@@ -52,7 +52,7 @@ function SideMenu({ children }: { children: any }) {
                 // currency_id: "MXN",
             }));
 
-            const response = await axios.post("http://localhost:3000/create_preference", { items });
+            const response = await axios.post("https://project-ecommerce-server.onrender.com/create_preference", { items });
 
             const { id } = response.data;
             return id
