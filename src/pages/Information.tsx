@@ -49,7 +49,7 @@ function Information() {
             <div className="max-w-screen-2xl px-4 mx-auto 2xl:px-0 mt-14 relative">
                 <div className='flex cursor-pointer w-fit' onClick={() => { if (backTo) { navigate("/favorite") } else { navigate('/') } }}>
                     <Icon component={ArrowBackIcon} sx={{ width: "20px" }} />
-                    <p className='font-medium ml-1'>Volver</p>
+                    <p className='font-medium ml-1'>Voltar à</p>
                 </div>
                 <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-4">
                     <div className="shrink-0 max-w-md lg:max-w-lg mx-auto">
@@ -66,18 +66,18 @@ function Information() {
                             <p
                                 className="text-2xl font-extrabold text-gray-900 sm:text-3xl"
                             >
-                                ${product.price}
+                                ${product.price} USD
                             </p>
                         </div>
 
                         <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                             <p
-                                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium  focus:outline-none  rounded-lg border    focus:z-10 focus:ring-4  focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700"
+                                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium  focus:outline-none  rounded-lg border focus:z-10 focus:ring-4  focus:ring-gray-700 bg-[#be0f34] text-white border-gray-600 hover:text-white hover:bg-[#ad142f]"
                                 role="button"
                                 onClick={() => toggleFavorite(product)}
                             >
                                 <Icon component={favorites.some((favorite: any) => favorite.id === product.id) ? FavoriteIcon : FavoriteBorderIcon} style={{ width: "20px", marginRight: "4px" }} />
-                                {favorites.includes(product) ? "Quitar de favoritos" : "Agregar a favoritos"}
+                                {favorites.includes(product) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                             </p>
 
                             <div className="flex items-center justify-center border border-black rounded-lg w-24">
@@ -121,7 +121,7 @@ function Information() {
                                     />
                                 </svg>
 
-                                Agregar al carrito
+                                Adicionar ao carrinho
                             </p>
                         </div>
 
@@ -136,7 +136,7 @@ function Information() {
 
             <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Producto agregado al carrito
+                    Produto adicionado ao carrinho
                 </Alert>
             </Snackbar>
         </section>

@@ -8,6 +8,7 @@ import Failure from "./pages/Failure";
 import Pending from "./pages/Pending";
 import Purchases from "./pages/Purchases";
 import Favorite from "./pages/Favorite";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/pending" element={<Pending />} />
           <Route path="/purchases" element={<Purchases />} />
           <Route path="/favorite" element={<Favorite />} />
+          <Route path="/info" element={<AboutUs />} />
         </Route>
       </Routes>
     </Router>

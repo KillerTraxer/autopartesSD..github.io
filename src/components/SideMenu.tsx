@@ -12,16 +12,17 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 import axios from 'axios';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function SideMenu({ children }: { children: any }) {
     useEffect(() => {
-        initMercadoPago('TEST-dea5798c-8f7f-43ad-9447-40d56577012a', { locale: 'es-MX' });
+        initMercadoPago('TEST-dea5798c-8f7f-43ad-9447-40d56577012a', { locale: "en-US" });
     }, []);
 
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     //@ts-ignore
@@ -101,7 +102,7 @@ function SideMenu({ children }: { children: any }) {
             // onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
         >
-            <Typography sx={{ fontWeight: "bold" }}>{cartItems.length} productos</Typography>
+            <Typography sx={{ fontWeight: "bold" }}>{cartItems.length} produtos</Typography>
             <hr className="my-3 border-gray-800" />
 
             <List sx={{ padding: 0, mb: 2 }}>
@@ -111,7 +112,7 @@ function SideMenu({ children }: { children: any }) {
                             <ListItem>
                                 <div className='flex flex-col -ml-3 relative'>
                                     <p className='text-[13px] font-bold'>{item.name}</p>
-                                    <p className='text-[13px]'>{item.quantity} x ${item.price}</p>
+                                    <p className='text-[13px]'>{item.quantity} x ${item.price} USD</p>
                                 </div>
                                 <img src={item.image} className='w-20 h-20 -mr-5 object-cover' />
                                 <IconButton
@@ -126,7 +127,7 @@ function SideMenu({ children }: { children: any }) {
                         </div>
                     ))
                 ) : (
-                    <Typography className='text-center text-gray-500'>No hay productos en tu carrito</Typography>
+                    <Typography className='text-center text-gray-500'>Não existem artigos no seu carrinho</Typography>
                 )
                 }
             </List>
@@ -136,8 +137,8 @@ function SideMenu({ children }: { children: any }) {
                     <hr className="my-3 border-gray-800" />
 
                     <div className='flex flex-row justify-between'>
-                        <p className='font-bold'>SUBTOTAL:</p>
-                        <p className='font-bold'>${calculateSubtotal()}</p>
+                        <p className='font-bold'>TOTAL:</p>
+                        <p className='font-bold'>${calculateSubtotal()} USD</p>
                     </div>
 
                     <div>
@@ -147,10 +148,10 @@ function SideMenu({ children }: { children: any }) {
                             </div>
                         ) : (
                             <button
-                                className="flex py-2.5 px-5 mt-5 font-medium w-full text-center items-center justify-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700"
+                                className="flex py-2.5 px-5 mt-5 font-medium w-full text-center items-center justify-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-[#be0f34] text-white border-gray-600 hover:text-white hover:bg-[#ad142f]"
                                 onClick={handleBuy}
                             >
-                                Finalizar compra
+                                Finalizar a compra
                             </button>
                         )}
                     </div>
@@ -166,7 +167,7 @@ function SideMenu({ children }: { children: any }) {
     return (
         <>
             <header className="antialiased">
-                <nav className="border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800">
+                <nav className="border-gray-200 px-4 lg:px-6 py-2.5 bg-[#0e3465]">
                     <div className="flex flex-wrap justify-between items-center">
                         <div className="flex justify-start items-center">
                             <div className="flex mr-4 cursor-default">
@@ -174,11 +175,14 @@ function SideMenu({ children }: { children: any }) {
                                 <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Autopartes de Santiago</span>
                             </div>
                             <div className='relative mt-1 ml-5' onClick={() => navigate('/')}>
-                                <p className='text-xl text-gray-500 hover:text-gray-300 cursor-pointer'>Inicio</p>
+                                <p className={`text-xl ${pathname === '/' ? 'text-gray-200' : 'text-gray-400'} hover:text-gray-200 cursor-pointer`}>Início</p>
+                            </div>
+                            <div className='relative mt-1 ml-5' onClick={() => navigate('/info')}>
+                                <p className={`text-xl ${pathname === '/info' ? 'text-gray-200' : 'text-gray-400'} hover:text-gray-200 cursor-pointer`}>Sobre nós</p>
                             </div>
                         </div>
                         <div className="flex items-center lg:order-2 gap-1">
-                            <button type="button" className="p-2 mr-1  rounded-lg   text-gray-400 hover:text-white hover:bg-gray-700 focus:ring-4  focus:ring-gray-600" onClick={handleProfileMenuOpen}>
+                            <button type="button" className="p-2 mr-1  rounded-lg   text-white hover:text-white hover:bg-blue-900 focus:ring-4  focus:ring-gray-600" onClick={handleProfileMenuOpen}>
                                 <span className="sr-only">View profile</span>
                                 <Icon component={PersonIcon} />
                             </button>
@@ -197,10 +201,10 @@ function SideMenu({ children }: { children: any }) {
                                 </MenuItem>
                                 <MenuItem onClick={handleShop} className='gap-2'>
                                     <Icon component={ShoppingCartIcon }/>
-                                    <p>Compras</p>
+                                    <p>Loja</p>
                                 </MenuItem>
                             </Menu>
-                            <button onClick={toggleDrawer(true)} type="button" className="flex flex-row p-2 mr-1  rounded-lg   text-gray-400 hover:text-white hover:bg-gray-700 focus:ring-4  focus:ring-gray-600">
+                            <button onClick={toggleDrawer(true)} type="button" className="flex flex-row p-2 mr-1  rounded-lg  text-white hover:text-white hover:bg-blue-900 focus:ring-4  focus:ring-gray-600">
                                 <span className="sr-only">View cart</span>
                                 <Icon component={ShoppingBagIcon} />
                                 <Typography sx={{ marginTop: "3px", marginLeft: "4px" }}>{totalItems}</Typography>
