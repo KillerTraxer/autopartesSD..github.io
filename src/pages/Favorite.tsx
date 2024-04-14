@@ -36,7 +36,7 @@ function Favorite() {
                                 <h3 className="text-xl font-bold tracking-tight text-white w-72 overflow-hidden text-ellipsis text-nowrap">
                                     {favorite.name}
                                 </h3>
-                                <p className="mt-3 mb-4 font-light  text-gray-400">${favorite.price}</p>
+                                <p className="mt-3 mb-4 font-light  text-gray-400">${favorite.price} USD</p>
                                 <div className='text-gray-400 mt-3 hover:text-gray-200 cursor-pointer flex flex-row gap-1 w-fit' onClick={() => navigate('/about', { state: { product: favorite, backTo: true } })} >
                                     <p className='font-bold'>Ver</p>
                                     <Icon component={ArrowForwardIcon} />
