@@ -27,8 +27,8 @@ function Home() {
         },
         {
             id: 2,
-            name: "CALAVERA EXTERIOR VW",
-            description: "La CALAVERA EXTERIOR VW GOL 13-18 4 PUERTAS OBSCURA S/FOCO RH MOD.05",
+            name: "CRÂNIO EXTERIOR VW",
+            description: "O CRÂNIO EXTERIOR VW GOL 13-18 4 PORTAS DARK S/FOCO RH MOD.05",
             price: 73.30,
             image: CalaveraExterior
         },

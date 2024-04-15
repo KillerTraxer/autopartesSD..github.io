@@ -1,52 +1,29 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, } from "react-router-dom"
 import usePurchasesStore from "../store/purchasesStore";
 import { useEffect } from "react";
 
 function Success() {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+    const location = useLocation();
     //@ts-ignore
     const { addPurchase } = usePurchasesStore();
 
+    const payment = location?.state ? location?.state.payment : {};
+
+    const relevantPaymentInfo = {
+        id: payment.id,
+        date_created: payment.date_created,
+        payment_method_id: payment.payment_method_id,
+        status: payment.status,
+        payer: payment.payer,
+        transaction_amount: payment.transaction_amount,
+    };
+
     useEffect(() => {
-        const collectionId = searchParams.get('collection_id');
-        const collectionStatus = searchParams.get('collection_status');
-        const paymentId = searchParams.get('payment_id');
-        const status = searchParams.get('status');
-        const externalReference = searchParams.get('external_reference');
-        const paymentType = searchParams.get('payment_type');
-        const merchantOrderId = searchParams.get('merchant_order_id');
-        const preferenceId = searchParams.get('preference_id');
-        const siteId = searchParams.get('site_id');
-        const processingMode = searchParams.get('processing_mode');
-        const merchantAccountId = searchParams.get('merchant_account_id');
-
-        //@ts-ignore
-        function createPurchaseObject(collectionId, collectionStatus, paymentId, status, externalReference, paymentType, merchantOrderId, preferenceId, siteId, processingMode, merchantAccountId) {
-            const currentDate = new Date();
-
-            const formattedDate = currentDate.toISOString();
-            
-            return {
-                collectionId,
-                collectionStatus,
-                paymentId,
-                status,
-                externalReference,
-                paymentType,
-                merchantOrderId,
-                preferenceId,
-                siteId,
-                processingMode,
-                merchantAccountId,
-                date: formattedDate,
-            };
+        if (Object.keys(payment).length > 0) {
+            addPurchase(relevantPaymentInfo);
         }
-
-        const purchase = createPurchaseObject(collectionId, collectionStatus, paymentId, status, externalReference, paymentType, merchantOrderId, preferenceId, siteId, processingMode, merchantAccountId);
-
-        addPurchase(purchase);
-    }, []);
+    }, [addPurchase, relevantPaymentInfo]);
 
     return (
         <section>

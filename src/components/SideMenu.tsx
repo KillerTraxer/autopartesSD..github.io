@@ -8,17 +8,18 @@ import ListItem from '@mui/material/ListItem';
 import { useState, useEffect } from 'react';
 import useCartStore from '../store/cartStore';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+import { initMercadoPago, Payment } from '@mercadopago/sdk-react';
 import axios from 'axios';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Modal from '@mui/material/Modal';
 
 function SideMenu({ children }: { children: any }) {
     useEffect(() => {
-        initMercadoPago('TEST-dea5798c-8f7f-43ad-9447-40d56577012a', { locale: "en-US" });
+        initMercadoPago('TEST-dea5798c-8f7f-43ad-9447-40d56577012a', { locale: "pt-BR" });
     }, []);
 
     const navigate = useNavigate();
@@ -28,6 +29,18 @@ function SideMenu({ children }: { children: any }) {
     //@ts-ignore
     const { cartItems, removeFromCart, getTotalPrice } = useCartStore();
     const [preferenceId, setPreferenceId] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const customization = {
+        paymentMethods: {
+            ticket: "all",
+            bankTransfer: "all",
+            creditCard: "all",
+            debitCard: "all",
+            mercadoPago: "all",
+        },
+        maxInstallments: 12
+    };
 
     const calculateSubtotal = () => {
         //@ts-ignore
@@ -53,7 +66,9 @@ function SideMenu({ children }: { children: any }) {
                 // currency_id: "MXN",
             }));
 
-            const response = await axios.post("https://project-ecommerce-server.onrender.com/create_preference", { items });
+            const response = await axios.post("http://project-ecommerce-server.onrender.com/create_preference", { items });
+            // const response = await axios.post("http://localhost:3000/create_preference", { items });
+
 
             const { id } = response.data;
             return id
@@ -66,8 +81,26 @@ function SideMenu({ children }: { children: any }) {
         const id = await createPreference();
         if (id) {
             setPreferenceId(id);
+            setModalOpen(true);
         }
     }
+
+    const handleModalClose = () => {
+        setModalOpen(false);
+    }
+
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: "auto",
+        maxHeight: "70vh",
+        bgcolor: 'background.paper',
+        borderRadius: "8px",
+        boxShadow: 24,
+        overflowY: "auto",
+    };
 
     useEffect(() => {
         if (!open) {
@@ -93,7 +126,6 @@ function SideMenu({ children }: { children: any }) {
         setAnchorEl(null);
         navigate("/purchases");
     };
-
 
     const list = () => (
         <Box
@@ -142,18 +174,13 @@ function SideMenu({ children }: { children: any }) {
                     </div>
 
                     <div>
-                        {preferenceId !== null ? (
-                            <div className='-ml-5'>
-                                <Wallet initialization={{ preferenceId: preferenceId }} />
-                            </div>
-                        ) : (
-                            <button
-                                className="flex py-2.5 px-5 mt-5 font-medium w-full text-center items-center justify-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-[#be0f34] text-white border-gray-600 hover:text-white hover:bg-[#ad142f]"
-                                onClick={handleBuy}
-                            >
-                                Finalizar a compra
-                            </button>
-                        )}
+
+                        <button
+                            className="flex py-2.5 px-5 mt-5 font-medium w-full text-center items-center justify-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-[#be0f34] text-white border-gray-600 hover:text-white hover:bg-[#ad142f]"
+                            onClick={handleBuy}
+                        >
+                            Finalizar a compra
+                        </button>
                     </div>
                 </>
             )}
@@ -196,11 +223,11 @@ function SideMenu({ children }: { children: any }) {
                                 }}
                             >
                                 <MenuItem onClick={handleFavorite} className='gap-2'>
-                                    <Icon component={FavoriteIcon}/>
+                                    <Icon component={FavoriteIcon} />
                                     <p>Favoritos</p>
                                 </MenuItem>
                                 <MenuItem onClick={handleShop} className='gap-2'>
-                                    <Icon component={ShoppingCartIcon }/>
+                                    <Icon component={ShoppingCartIcon} />
                                     <p>Loja</p>
                                 </MenuItem>
                             </Menu>
@@ -222,6 +249,50 @@ function SideMenu({ children }: { children: any }) {
             >
                 {list()}
             </Drawer>
+
+            <Modal
+                open={modalOpen}
+                onClose={handleModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={modalStyle}>
+                    {preferenceId !== null && (
+                        <Payment
+                            initialization={{
+                                amount: calculateSubtotal(),
+                                preferenceId: preferenceId,
+                            }}
+                            onSubmit={async ({formData}) => {
+                                try {
+                                    const response = await axios.post("http://project-ecommerce-server.onrender.com/process_payment", { formData });
+                                    if (response.data.paymentId.status === "approved") {
+                                        setTimeout(() => {
+                                            setOpen(false);
+                                            setModalOpen(false);
+                                            navigate("/success", {state: { payment: response.data.paymentId }});
+                                        }, 4000);
+                                    } else if (response.data.paymentId.status === "pending") {
+                                        setTimeout(() => {
+                                            setOpen(false);
+                                            setModalOpen(false);
+                                            navigate("/pending", {state: { payment: response.data.paymentId }});
+                                        }, 4000);
+                                    }
+                                } catch (error) {
+                                    console.log("Error al procesar el pago:", error);
+                                }
+                                // await setModalOpen(false);
+                            }}
+                            //@ts-ignore
+                            customization={customization}
+                            onError={() => {
+                                console.log("nel");
+                            }}
+                        />
+                    )}
+                </Box>
+            </Modal>
 
             <main className={`mt-10`}>
                 {children}

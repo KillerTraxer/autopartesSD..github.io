@@ -21,7 +21,7 @@ function Purchases() {
 
                 {purchases.length > 0 ? (
                     purchases.map((purchase: any, index: any) => {
-                        const [datePart, timePart] = purchase.date.split('T');
+                        const [datePart, timePart] = purchase.date_created.split('T');
                         const [hours, minutes] = timePart.split(':').slice(0, 2);
                         const formattedDate = `${datePart} ${hours}:${minutes}`;
 
@@ -31,8 +31,9 @@ function Purchases() {
                                     <h3 className="text-xl font-bold tracking-tight text-white w-full overflow-hidden text-ellipsis text-nowrap">
                                         Compra efectuada em {formattedDate}
                                     </h3>
-                                    <p className="mt-3 mb-2 font-light text-gray-200">Estado: {purchase.status}</p>
-                                    <p className="mt-3 mb-0 font-light text-gray-200">Método de pagamento: {purchase.paymentType}</p>
+                                    <p className="mt-3 mb-2 font-light text-gray-200">Preço: ${purchase.transaction_amount} USD</p>
+                                    <p className="mt-3 mb-2 font-light text-gray-200">Estado: {purchase.status === "pending" ? "pendente" : "aprovado"}</p>
+                                    <p className="mt-3 mb-0 font-light text-gray-200">Método de pagamento: {purchase.payment_method_id}</p>
                                 </div>
                             </div>
                         );

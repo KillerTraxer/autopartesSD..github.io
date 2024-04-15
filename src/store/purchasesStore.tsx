@@ -6,7 +6,7 @@ const usePurchasesStore = create(
         (set) => ({
             purchases: [],
             addPurchase: (purchase: any) => set((state: any) => {
-                const existingPurchase = state.purchases.find((p: any) => p.collectionId === purchase.collectionId);
+                const existingPurchase = state.purchases.find((p: any) => p.id === purchase.id);
                 if (existingPurchase) {
                     // Si la compra ya existe, no hacer nada
                     return state;
