@@ -15,7 +15,7 @@ function Favorite() {
             <div className="mx-auto max-w-screen-xl flex flex-col justify-center items-center">
                 <div className='flex cursor-pointer w-fit justify-end items-start self-start' onClick={() => navigate("/")}>
                     <Icon component={ArrowBackIcon} sx={{ width: "20px" }} />
-                    <p className='font-medium ml-1'>Voltar à</p>
+                    <p className='font-medium ml-1'>Volver</p>
                 </div>
                 <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-10 justify-center items-center flex flex-col">
                     <h2 className="mb-0 text-4xl tracking-tight font-extrabold text-gray-900">Lista de Favoritos</h2>
@@ -45,7 +45,7 @@ function Favorite() {
                         </div>
                     ))
                 ) : (
-                    <p className="font-light text-gray-500 lg:mb-8 sm:text-xl">Nenhum produto favorito</p>
+                    <p className="font-light text-gray-500 lg:mb-8 sm:text-xl">Sin favoritos...</p>
                 )}
                 
             </div>

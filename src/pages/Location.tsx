@@ -1,9 +1,8 @@
-import { Icon } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import { Icon } from "@mui/material"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AboutUsImage from "../assets/aboutUs.jpg";
+import { useNavigate } from "react-router-dom";
 
-function AboutUs() {
+function Location() {
     const navigate = useNavigate();
 
     return (
@@ -13,16 +12,14 @@ function AboutUs() {
                     <Icon component={ArrowBackIcon} sx={{ width: "20px" }} />
                     <p className='font-medium ml-1'>Volver</p>
                 </div>
-
                 <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-10 justify-center items-center flex flex-col">
-                    <h2 className="mb-0 text-4xl tracking-tight font-extrabold text-gray-900">Sobre nosotros</h2>
+                    <h2 className="mb-0 text-4xl tracking-tight font-extrabold text-gray-900">Visitanos!</h2>
                 </div>
 
-                <img className="w-full block" src={AboutUsImage} alt={"Sobre nós"} />
-
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14577.179767750911!2d-104.654602!3d24.0206623!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869bb7e16bd9cb75%3A0x7eb376b24114fa7c!2sAutopartes%20de%20Santiago!5e0!3m2!1ses-419!2smx!4v1723660925452!5m2!1ses-419!2smx" width="600" height="450" loading="lazy"></iframe>
             </div>
         </section>
     )
 }
 
-export default AboutUs
+export default Location
